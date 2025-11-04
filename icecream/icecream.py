@@ -226,6 +226,25 @@ def _(obj: str) -> str:
     return "'" + obj.replace('\\', '\\\\') + "'"
 
 
+@argumentToString.register(int)
+def _(obj: int) -> str:
+    return hex(obj)
+
+
+@argumentToString.register(list)
+def _(obj: list) -> str:
+    elements = [argumentToString(item) for item in obj]
+    return '[' + ', '.join(elements) + ']'
+
+
+@argumentToString.register(tuple)
+def _(obj: tuple) -> str:
+    elements = [argumentToString(item) for item in obj]
+    if len(elements) == 1:
+        return '(' + elements[0] + ',)'
+    return '(' + ', '.join(elements) + ')'
+
+
 class IceCreamDebugger:
     _pairDelimiter = ', '  # Used by the tests in tests/.
     lineWrapWidth = DEFAULT_LINE_WRAP_WIDTH
